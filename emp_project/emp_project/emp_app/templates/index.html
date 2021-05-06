@@ -1,0 +1,66 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sherry Technologies</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <span class="navbar-brand mb-0 h1">Sherry Technologies</span>
+      </nav>
+
+    <div class="container">
+        <div class="col-lg-5 border rounded p-4 m-4">
+            <form action="#" id="employeeForm">
+                <h1>Employee Form</h1>
+                {% csrf_token %}
+            {{employeeForm|crispy}}
+            <input class="btn btn-success" type="submit" value="Save">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function(){
+        
+    })
+
+function onEmployeeFormSubmission(event) {
+    //1. read data of form
+    event.preventDefault()
+    const valuesInArray = $(this).serializeArray()
+
+    const body = {}
+    valuesInArray.forEach(e =>{
+        body[e.name] = e.value
+    })
+
+    
+    // 2. send data to server using ajax
+    $.ajax({
+        method: "POST",
+        url: "/employee",
+        data: body
+    })    
+    .done(function(response){
+        console.log(response)
+        event.target.reset()
+        alert("Details Submitted Successfully!")
+    })
+    .fail(function(response){
+        console.log(response)
+    })
+    
+}
+
+
+$("#employeeForm").submit(onEmployeeFormSubmission)
+</script>
